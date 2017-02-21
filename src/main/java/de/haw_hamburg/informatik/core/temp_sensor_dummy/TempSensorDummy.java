@@ -12,10 +12,10 @@ import java.util.ArrayList;
  * Created by TimoHäckel on 30.01.2017.
  */
 public class TempSensorDummy implements Runnable {
-    private static final Logger log = LoggerFactory.getLogger(RainSensorDummy.class);
+    private static final Logger log = LoggerFactory.getLogger(TempSensorDummy.class);
 
-    private static final String URI = "http://localhost:8090/";
-    private static final String PATH = "raindata/insert";
+    private static final String URI = "http://localhost:8091/";
+    private static final String PATH = "tempdata/insert";
 
     private final String sensorID;
 
@@ -27,7 +27,19 @@ public class TempSensorDummy implements Runnable {
     public void run() {
 
         while (!Thread.interrupted()){
-            //Fill what todo!
+            double temperature = (double)(Math.random() * 30);
+            String query = URI + PATH +
+                    "?srcid=" + sensorID +
+                    "&temperature=" + temperature;
+            System.out.println(query);
+            RestTemplate restTemplate = new RestTemplate();
+            String ret = restTemplate.getForObject(query, String.class);
+            System.out.println(ret);
+            try {
+                Thread.sleep((int)(Math.random()*5000));
+            } catch (InterruptedException e) {
+                break;
+            }
         }
 
     }
